@@ -1,0 +1,10 @@
+{
+    "python.testing.pytestEnabled": true,
+    "editor.rulers": [80],
+    "files.exclude": {
+        ".pytest_cache": true,
+        ".coverage": true,
+        "coverage.xml": true
+    },
+    "autoDocstring.docstringFormat": "google"
+}

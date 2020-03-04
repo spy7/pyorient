@@ -5,6 +5,7 @@ from datetime import date, datetime
 from decimal import Decimal, localcontext
 from .otypes import OrientRecordLink, OrientRecord, OrientBinaryObject
 from .exceptions import PyOrientBadMethodCallException
+from calendar import timegm
 try:
     import pyorient_native
     binary_support = True
@@ -195,9 +196,9 @@ class OrientSerializationCSV(object):
         elif isinstance(value, int):
             ret = str(value)
         elif isinstance(value, datetime):
-            ret = str(int(time.mktime(value.timetuple())) * 1000) + 't'
+            ret = str(int(timegm(value.timetuple())) * 1000) + 't'
         elif isinstance(value, date):
-            ret = str(int(time.mktime(value.timetuple())) * 1000) + 'a'
+            ret = str(int(timegm(value.timetuple())) * 1000) + 'a'
         elif isinstance(value, Decimal):
             ret = '{:f}c'.format(value)
         elif isinstance(value, list):
@@ -363,11 +364,11 @@ class OrientSerializationCSV(object):
             collected = float(collected)
             offset += 1
         elif c == 'a':
-            collected = date.fromtimestamp(float(collected) / 1000)
+            collected = datetime.utcfromtimestamp(float(collected) / 1000).date()
             offset += 1
         elif c == 't':
             # date
-            collected = datetime.fromtimestamp(float(collected) / 1000)
+            collected = datetime.utcfromtimestamp(float(collected) / 1000)
             offset += 1
         elif c == 'b' or c == 's':
             collected = int(collected)
